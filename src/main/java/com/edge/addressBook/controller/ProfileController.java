@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/profiles")
-@Tag(name = "Profiles", description = "Operations related to user profiles and their addresses")
+@RequestMapping("/addressbook")
+@Tag(name = "addressbook", description = "Operations related to user profiles and their addresses")
 @RequiredArgsConstructor
 public class ProfileController {
 
@@ -27,26 +27,26 @@ public class ProfileController {
     private final AddressRepository addressRepository;
 
     @Operation(summary = "Get all profiles")
-    @GetMapping("/")
+    @GetMapping("/allProfiles")
     public List<Profile> getAllProfiles() {
         return profileRepository.findAll();
     }
 
     @Operation(summary = "Get profile by ID")
-    @GetMapping("/{id}")
+    @GetMapping("/profile/{id}")
     public ResponseEntity<Profile> getProfileById(@PathVariable Long id) {
         Optional<Profile> profile = profileRepository.findById(id);
         return profile.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Create a new profile")
-    @PostMapping("/")
+    @PostMapping("/createProfile")
     public Profile createProfile(@RequestBody Profile profile) {
         return profileRepository.save(profile);
     }
 
     @Operation(summary = "Update an existing profile")
-    @PutMapping("/{id}")
+    @PutMapping("/profile/{id}")
     public ResponseEntity<Profile> updateProfile(@PathVariable Long id, @RequestBody Profile profile) {
         if (profileRepository.existsById(id)) {
             profile.setId(id);
@@ -57,7 +57,7 @@ public class ProfileController {
     }
 
     @Operation(summary = "Delete a profile")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/profile/{id}")
     public ResponseEntity<Void> deleteProfile(@PathVariable Long id) {
         if (profileRepository.existsById(id)) {
             profileRepository.deleteById(id);
